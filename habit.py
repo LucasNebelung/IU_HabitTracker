@@ -5,6 +5,7 @@
 # Importing modules
 import datetime as dt
 import sqlite3
+from database import database_controller as db
 
 # defining datetime objects
 today = dt.date.today()
@@ -19,7 +20,7 @@ class Habit:
         self.periodicity = periodicity
         self.current_frequency = current_frequency
         self.frequency = frequency
-        self.last_timestamp = dt.datetime.strptime(last_timestamp, "%Y-%m-%d").date()
+        self.last_timestamp = last_timestamp
         self.current_streak = current_streak
         self.is_in_time = is_in_time
 
@@ -30,6 +31,7 @@ class Habit:
         ''' Method to control whether the habit is in time or not.
         Based on Periodicity, it checks whether the last timestamp is in time or not.
         and returns a boolean value (is_in_time).'''
+        self.last_timestamp = dt.datetime.strptime(self.last_timestamp, "%Y-%m-%d").date()
         if self.periodicity == "daily":
             if self.last_timestamp + one_day == today:
                 self.is_in_time = True
@@ -64,86 +66,26 @@ class Habit:
         self.last_timestamp = today
         #hier noch Methode hinzufügen, dass Daten auch in die habit_history Tabelle geschrieben werden
 
-class database_modifier:
-    def __init__(self):
-        pass
 
-    def initalize_database(self):
-        ''' Method to initalize the database. 
-        Creates a database file and a table to store the habits.'''
-        conn = sqlite3.connect('habit_tracker.db')
-        c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS habits
-                    (
-                  habit_name TEXT PRIMARY KEY NOT NULL, 
-                  habit_specification text, 
-                  periodicity text, 
-                  current_frequency integer, 
-                  frequency integer, 
-                  last_timestamp text, 
-                  current_streak integer)''')
+    def load_all_habits(self):
+        ''' Method to create a habit instance from each entry in the database.'''
         
-        c.execute('''CREATE TABLE IF NOT EXISTS habit_history
-                    (
-                  id integer PRIMARY KEY AUTOINCREMENT, 
-                  historic_timestamp text, 
-                  streak_count integer, 
-                  habit_name text, 
-                  FOREIGN KEY(habit_name) REFERENCES habits(habit_name))''')
-        conn.commit()
-        conn.close()
-
-    def insert_testdata(self):
-        ''' Method to insert test data into the database.'''
-        conn = sqlite3.connect('habit_tracker.db')
-        c = conn.cursor()
-        c.execute('''INSERT INTO habits VALUES ("Testhabit", "Testdescription", "daily", 0, 1, "2024-04-17", 0)''')
-        c.execute('''INSERT INTO habits VALUES ("Testhabit2", "Testdescription2", "weekly", 0, 1, "2024-04-15", 0)''')
-        conn.commit()
-        conn.close()
-
-    def load_habit(self, habit_name):
-        ''' Method to load a habit and create an Instance of the Habit class using habit_name.'''
-        conn = sqlite3.connect('habit_tracker.db')
-        c = conn.cursor()
-        c.execute('''SELECT * FROM habits WHERE habit_name = ?''', (habit_name,))
-        habit_data = c.fetchone()
-        # creating an instance out of habit_data
-        habit_name = Habit(*habit_data)
-        conn.close()
-        return habit_name
-    
-    def update_habit(self,habit_name, current_frequency, current_streak, last_timestamp):
-        ''' Method to easily update the current_frequency, current_streak and last_timestamp of a habit.'''
-        conn = sqlite3.connect('habit_tracker.db')
-        c = conn.cursor()
-        c.execute('''UPDATE habits SET current_frequency = ?, current_streak = ?, last_timestamp = ? WHERE habit_name = ?''', (current_frequency, current_streak, last_timestamp, habit_name))
-        conn.commit()
-        conn.close()
 
         
 
         
-    
+#################### Testing
 
+all_habits = [('Brush teeth', 'Brush your teeth in the morning and evening', 'daily', 0, 2, '2024-04-17', 0), 
+              ('Vacuum room', 'Vacuum your room twice a week, dont forget Bathroom', 'weekly', 0, 2, '2024-04-15', 0), 
+              ('Workout', 'Workout five times a week, dont forget running', 'weekly', 0, 5, '2024-04-15', 0), 
+              ('Learn Spanish', 'Learn Spanish once a day alternate between vocab and grammar', 'daily', 0, 1, '2024-04-17', 0), 
+              ('Call Family', 'Call your family once a week', 'weekly', 0, 1, '2024-04-15', 0)]
 
-# Testing the class
-#Testhabit = Habit("Testhabit", "Testdescription", "daily", 0, 1, "2024-04-15" , 0)
-#Testhabit2 = Habit("Testhabit2", "Testdescription2", "weekly", 0, 1, "2024-04-15" , 0) 
+# creating instances of the Habit class
+for i, habit_data in enumerate(all_habits, start=1):
+    habit_name, habit_specification, periodicity, current_frequency, frequency, last_timestamp, current_streak = habit_data
+    vars()[f"habit{i}"] = Habit(habit_name, habit_specification, periodicity, current_frequency, frequency, last_timestamp, current_streak)
 
-
-db = database_modifier()
-
-
-Testhabit = db.load_habit ("Testhabit")
-#print (Testhabit)
-#Testhabit.control_time_habit()
-#print (Testhabit)
-#Testhabit.check_off_habit()
-#print (Testhabit)
-
-
-db.update_habit("Testhabit", Testhabit.current_frequency, Testhabit.current_streak, Testhabit.last_timestamp)
-print (Testhabit)
-
-
+print (habit1)
+################################### Hier weitermachen!!!!!!!

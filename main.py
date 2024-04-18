@@ -2,7 +2,10 @@
 # Habit Tracker Frontend (UI)
 #####################
 
-print ("Welcome to the Habit Tracker!")
+import habit as hb
 
 
+
+print ("Hi! Welcome to the Habit Tracker")
+print (" Any tasks done today?")
 
