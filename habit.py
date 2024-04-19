@@ -5,7 +5,7 @@
 # Importing modules
 import datetime as dt
 import sqlite3
-from database import database_controller as db
+from database import database_controller 
 
 # defining datetime objects
 today = dt.date.today()
@@ -66,26 +66,28 @@ class Habit:
         self.last_timestamp = today
         #hier noch Methode hinzufügen, dass Daten auch in die habit_history Tabelle geschrieben werden
 
-
     def load_all_habits(self):
-        ''' Method to create a habit instance from each entry in the database.'''
-        
+        ''' Method to load all habits from the database.
+        1. get number of rows 
+        2. get habit by row
+        3. create Habit object and append to list'''
 
-        
 
-        
-#################### Testing
 
-all_habits = [('Brush teeth', 'Brush your teeth in the morning and evening', 'daily', 0, 2, '2024-04-17', 0), 
-              ('Vacuum room', 'Vacuum your room twice a week, dont forget Bathroom', 'weekly', 0, 2, '2024-04-15', 0), 
-              ('Workout', 'Workout five times a week, dont forget running', 'weekly', 0, 5, '2024-04-15', 0), 
-              ('Learn Spanish', 'Learn Spanish once a day alternate between vocab and grammar', 'daily', 0, 1, '2024-04-17', 0), 
-              ('Call Family', 'Call your family once a week', 'weekly', 0, 1, '2024-04-15', 0)]
+db = database_controller()
 
-# creating instances of the Habit class
-for i, habit_data in enumerate(all_habits, start=1):
-    habit_name, habit_specification, periodicity, current_frequency, frequency, last_timestamp, current_streak = habit_data
-    vars()[f"habit{i}"] = Habit(habit_name, habit_specification, periodicity, current_frequency, frequency, last_timestamp, current_streak)
+#habit_number
+#i = 0
+#habit_number[i] = Habit(db.get_habit_by_row(i)[0], db.get_habit_by_row(i)[1], db.get_habit_by_row(i)[2], db.get_habit_by_row(i)[3], db.get_habit_by_row(i)[4], db.get_habit_by_row(i)[5], db.get_habit_by_row(i)[6])
+#print (habit1.habit_name)
 
-print (habit1)
-################################### Hier weitermachen!!!!!!!
+#habit0 = Habit(db.get_habit_by_row(0)[0], db.get_habit_by_row(0)[1], db.get_habit_by_row(0)[2], db.get_habit_by_row(0)[3], db.get_habit_by_row(0)[4], db.get_habit_by_row(0)[5], db.get_habit_by_row(0)[6])
+ 
+#print (habit0.habit_name)
+
+my_list = []
+
+for i in range(5):
+    my_list.append(habit + i)
+
+print(my_list)

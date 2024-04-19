@@ -2,7 +2,6 @@
 # Habit Tracker Frontend (UI)
 #####################
 
-import habit as hb
 
 
 

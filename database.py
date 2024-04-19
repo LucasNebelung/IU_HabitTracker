@@ -30,7 +30,7 @@ class database_controller:
         c.execute('''CREATE TABLE IF NOT EXISTS habit_history
                     (
                   id integer PRIMARY KEY AUTOINCREMENT, 
-                  historic_timestamp text, 
+                 historic_timestamp text, 
                   streak_count integer, 
                   habit_name text, 
                   FOREIGN KEY(habit_name) REFERENCES habits(habit_name))''')
@@ -48,16 +48,6 @@ class database_controller:
         c.execute('''INSERT INTO habits VALUES ("Call Family", "Call your family once a week", "weekly", 0, 1, "2024-04-15", 0)''')
         conn.commit()
         conn.close()
-
-    def get_specific_habit(self, habit_name):
-        ''' Method to load a habit and create an Instance of the Habit class using habit_name.'''
-        conn = sqlite3.connect('habit_tracker.db')
-        c = conn.cursor()
-        c.execute('''SELECT * FROM habits WHERE habit_name = ?''', (habit_name,))
-        habit_data = c.fetchone()
-        # creating an instance out of habit_data
-        conn.close()
-        return habit_data
     
     def update_habit(self,habit_name, current_frequency, current_streak, last_timestamp):
         ''' Method to easily update the current_frequency, current_streak and last_timestamp of a habit.'''
@@ -101,28 +91,22 @@ class database_controller:
         conn.close()
         return daily_habits
     
-    def count_rows(self):
-        ''' Method to count the rows in the habits table.'''
-        conn = sqlite3.connect('habit_tracker.db')
-        c = conn.cursor()
-        c.execute('''SELECT COUNT(*) FROM habits''')
-        count = c.fetchone()
-        conn.close()
-        return count
-    
-    def get_all_habits(self):
-        ''' Method to get all habits.'''
+    def get_number_of_rows(self):
+        ''' Method to get the number of rows in the habits table.'''
         conn = sqlite3.connect('habit_tracker.db')
         c = conn.cursor()
         c.execute('''SELECT * FROM habits''')
-        all_habits = c.fetchall()
+        rows = c.fetchall()
         conn.close()
-        return all_habits
-
-
-db = database_controller()
-
-all_habits = db.get_all_habits()
-print (all_habits)
-
+        return len(rows)
+    
+    def get_habit_by_row (self, row):
+        ''' Method to get a habit by the row number.'''
+        conn = sqlite3.connect('habit_tracker.db')
+        c = conn.cursor()
+        c.execute('''SELECT * FROM habits''')
+        habit = c.fetchall()[row]
+        conn.close()
+        return habit
+    
 
