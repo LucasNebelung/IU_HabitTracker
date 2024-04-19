@@ -108,5 +108,12 @@ class database_controller:
         habit = c.fetchall()[row]
         conn.close()
         return habit
+    def generate_habit_names (self, number_of_habits):
+        number_of_habits = "habit" + str (number_of_habits)
+        return number_of_habits
+        habit_list = []
+        for number_of_habits in habit_list:
+            habit_list.append ("habit" + str (number_of_habits))
+            return habit_list 
     
-
+    

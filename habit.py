@@ -5,7 +5,8 @@
 # Importing modules
 import datetime as dt
 import sqlite3
-from database import database_controller 
+from database import database_controller
+db = database_controller () 
 
 # defining datetime objects
 today = dt.date.today()
@@ -66,28 +67,18 @@ class Habit:
         self.last_timestamp = today
         #hier noch Methode hinzufügen, dass Daten auch in die habit_history Tabelle geschrieben werden
 
-    def load_all_habits(self):
-        ''' Method to load all habits from the database.
-        1. get number of rows 
-        2. get habit by row
-        3. create Habit object and append to list'''
+def load_all_habits(self):
+    global habit1, habit2, habit3, habit4, habit5, habit6, habit7, habit8, habit9, habit10
+    max_rows = db.get_number_of_rows()
+    rows = 0
+    while rows < max_rows:
+        habit1 = Habit (db.get_habit_by_row (0)[0], db.get_habit_by_row (0)[1], db.get_habit_by_row (0)[2], db.get_habit_by_row (0)[3], db.get_habit_by_row (0)[4], db.get_habit_by_row (0)[5], db.get_habit_by_row (0)[6])
+        rows += 1
+        if rows >= max_rows: 
+            return habit1
+        habit2 = Habit (db.get_habit_by_row(1)[0],)
+        
+    
 
-
-
-db = database_controller()
-
-#habit_number
-#i = 0
-#habit_number[i] = Habit(db.get_habit_by_row(i)[0], db.get_habit_by_row(i)[1], db.get_habit_by_row(i)[2], db.get_habit_by_row(i)[3], db.get_habit_by_row(i)[4], db.get_habit_by_row(i)[5], db.get_habit_by_row(i)[6])
-#print (habit1.habit_name)
-
-#habit0 = Habit(db.get_habit_by_row(0)[0], db.get_habit_by_row(0)[1], db.get_habit_by_row(0)[2], db.get_habit_by_row(0)[3], db.get_habit_by_row(0)[4], db.get_habit_by_row(0)[5], db.get_habit_by_row(0)[6])
- 
-#print (habit0.habit_name)
-
-my_list = []
-
-for i in range(5):
-    my_list.append(habit + i)
-
-print(my_list)
+load_all_habits(db)
+print(habit1.habit_name)
