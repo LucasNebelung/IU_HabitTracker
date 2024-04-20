@@ -74,11 +74,48 @@ def load_all_habits(self):
     while rows < max_rows:
         habit1 = Habit (db.get_habit_by_row (0)[0], db.get_habit_by_row (0)[1], db.get_habit_by_row (0)[2], db.get_habit_by_row (0)[3], db.get_habit_by_row (0)[4], db.get_habit_by_row (0)[5], db.get_habit_by_row (0)[6])
         rows += 1
-        if rows >= max_rows: 
+        if rows == max_rows:
             return habit1
-        habit2 = Habit (db.get_habit_by_row(1)[0],)
+        habit2 = Habit (db.get_habit_by_row(1)[0], db.get_habit_by_row(1)[1], db.get_habit_by_row(1)[2], db.get_habit_by_row(1)[3], db.get_habit_by_row(1)[4], db.get_habit_by_row(1)[5], db.get_habit_by_row(1)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2
+        habit3 = Habit (db.get_habit_by_row(2)[0], db.get_habit_by_row(2)[1], db.get_habit_by_row(2)[2], db.get_habit_by_row(2)[3], db.get_habit_by_row(2)[4], db.get_habit_by_row(2)[5], db.get_habit_by_row(2)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3
+        habit4 = Habit (db.get_habit_by_row(3)[0], db.get_habit_by_row(3)[1], db.get_habit_by_row(3)[2], db.get_habit_by_row(3)[3], db.get_habit_by_row(3)[4], db.get_habit_by_row(3)[5], db.get_habit_by_row(3)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3, habit4
+        habit5 = Habit (db.get_habit_by_row(4)[0], db.get_habit_by_row(4)[1], db.get_habit_by_row(4)[2], db.get_habit_by_row(4)[3], db.get_habit_by_row(4)[4], db.get_habit_by_row(4)[5], db.get_habit_by_row(4)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3, habit4, habit5
+        habit6 = Habit (db.get_habit_by_row(5)[0], db.get_habit_by_row(5)[1], db.get_habit_by_row(5)[2], db.get_habit_by_row(5)[3], db.get_habit_by_row(5)[4], db.get_habit_by_row(5)[5], db.get_habit_by_row(5)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3, habit4, habit5, habit6
+        habit7 = Habit (db.get_habit_by_row(6)[0], db.get_habit_by_row(6)[1], db.get_habit_by_row(6)[2], db.get_habit_by_row(6)[3], db.get_habit_by_row(6)[4], db.get_habit_by_row(6)[5], db.get_habit_by_row(6)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3, habit4, habit5, habit6, habit7
+        habit8 = Habit (db.get_habit_by_row(7)[0], db.get_habit_by_row(7)[1], db.get_habit_by_row(7)[2], db.get_habit_by_row(7)[3], db.get_habit_by_row(7)[4], db.get_habit_by_row(7)[5], db.get_habit_by_row(7)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3, habit4, habit5, habit6, habit7, habit8
+        habit9 = Habit (db.get_habit_by_row(8)[0], db.get_habit_by_row(8)[1], db.get_habit_by_row(8)[2], db.get_habit_by_row(8)[3], db.get_habit_by_row(8)[4], db.get_habit_by_row(8)[5], db.get_habit_by_row(8)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3, habit4, habit5, habit6, habit7, habit8, habit9
+        habit10 = Habit (db.get_habit_by_row(9)[0], db.get_habit_by_row(9)[1], db.get_habit_by_row(9)[2], db.get_habit_by_row(9)[3], db.get_habit_by_row(9)[4], db.get_habit_by_row(9)[5], db.get_habit_by_row(9)[6])
+        rows += 1
+        if rows == max_rows: 
+            return habit1, habit2, habit3, habit4, habit5, habit6, habit7, habit8, habit9, habit10
         
-    
+        
+    #################Hier weitermachen
 
 load_all_habits(db)
-print(habit1.habit_name)
+
+print (habit5.current_frequency)
