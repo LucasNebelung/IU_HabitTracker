@@ -41,11 +41,11 @@ class database_controller:
         ''' Method to insert test data into the database.'''
         conn = sqlite3.connect('habit_tracker.db')
         c = conn.cursor()
-        c.execute('''INSERT INTO habits VALUES ("Brush teeth", "Brush your teeth in the morning and evening", "daily", 0, 2, "2024-04-17", 0)''')
-        c.execute('''INSERT INTO habits VALUES ("Vacuum room", "Vacuum your room twice a week, dont forget Bathroom", "weekly", 0, 2, "2024-04-15", 0)''')
-        c.execute('''INSERT INTO habits VALUES ("Workout", "Workout five times a week, dont forget running", "weekly", 0, 5, "2024-04-15", 0)''')
-        c.execute('''INSERT INTO habits VALUES ("Learn Spanish", "Learn Spanish once a day alternate between vocab and grammar", "daily", 0, 1, "2024-04-17", 0)''')
-        c.execute('''INSERT INTO habits VALUES ("Call Family", "Call your family once a week", "weekly", 0, 1, "2024-04-15", 0)''')
+        c.execute('''INSERT INTO habits VALUES ("Brush teeth", "Brush your teeth in the morning and evening", "day", 0, 2, "2024-04-17", 0)''')
+        c.execute('''INSERT INTO habits VALUES ("Vacuum room", "Vacuum your room twice a week, dont forget Bathroom", "week", 0, 2, "2024-04-15", 0)''')
+        c.execute('''INSERT INTO habits VALUES ("Workout", "Workout five times a week, dont forget running", "week", 0, 5, "2024-04-15", 0)''')
+        c.execute('''INSERT INTO habits VALUES ("Learn Spanish", "Learn Spanish once a day alternate between vocab and grammar", "day", 0, 1, "2024-04-17", 0)''')
+        c.execute('''INSERT INTO habits VALUES ("Call Family", "Call your family once a week", "week", 0, 1, "2024-04-15", 0)''')
         conn.commit()
         conn.close()
     
@@ -72,24 +72,33 @@ class database_controller:
         c.execute('''INSERT INTO habits VALUES (?, ?, ?, 0, ?, ?, 0)''', (habit_name, habit_specification, periodicity, frequency, last_timestamp))
         conn.commit()
         conn.close()
-
-    def get_weekly_habits(self):
-        ''' Method to get all habits that are weekly.'''
+    
+    def get_current_streaks (self):
+        ''' Method to get the current streaks of all habits.'''
         conn = sqlite3.connect('habit_tracker.db')
         c = conn.cursor()
-        c.execute('''SELECT * FROM habits WHERE periodicity = "weekly"''')
-        weekly_habits = c.fetchall()
+        c.execute('''SELECT  habit_name, current_streak FROM habits''')
+        habits = c.fetchall()
         conn.close()
-        return weekly_habits
+        return habits
+
+    def get_weekkly_habits(self):
+        ''' Method to get all habits that are week.'''
+        conn = sqlite3.connect('habit_tracker.db')
+        c = conn.cursor()
+        c.execute('''SELECT * FROM habits WHERE periodicity = "week"''')
+        week_habits = c.fetchall()
+        conn.close()
+        return week_habits
     
     def get_daily_habits(self):
-        ''' Method to get all habits that are daily.'''
+        ''' Method to get all habits that are day.'''
         conn = sqlite3.connect('habit_tracker.db')
         c = conn.cursor()
-        c.execute('''SELECT * FROM habits WHERE periodicity = "daily"''')
-        daily_habits = c.fetchall()
+        c.execute('''SELECT * FROM habits WHERE periodicity = "day"''')
+        day_habits = c.fetchall()
         conn.close()
-        return daily_habits
+        return day_habits
     
     def get_number_of_rows(self):
         ''' Method to get the number of rows in the habits table.'''
@@ -108,12 +117,5 @@ class database_controller:
         habit = c.fetchall()[row]
         conn.close()
         return habit
-    def generate_habit_names (self, number_of_habits):
-        number_of_habits = "habit" + str (number_of_habits)
-        return number_of_habits
-        habit_list = []
-        for number_of_habits in habit_list:
-            habit_list.append ("habit" + str (number_of_habits))
-            return habit_list 
-    
-    
+   
+db = database_controller()
