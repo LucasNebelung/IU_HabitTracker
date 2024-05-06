@@ -5,6 +5,7 @@
 import habit as hb 
 from database import database_controller 
 db = database_controller ()
+import time
 
 #loading all habits from the database into the habit objects
 
@@ -21,6 +22,7 @@ def start_page():
     number_of_habits = db.get_number_of_rows()
     row = 0 
     # displaying all active habits
+    print ("\n")
     while row < number_of_habits:
         if db.get_number_of_rows == 0:
             print ("No habits to track. Please add a habit first.")
@@ -124,6 +126,7 @@ def start_page():
 
 def menu():
     ''' Function to display the menu of the Habit Tracker.'''
+    print ("\n")
     print ("MENU")
     print ("1. View Insights")
     print ("2. View Schedule")
@@ -166,6 +169,7 @@ def menu():
 # 1. View Insights
 def insights():
     ''' Function to display the insights of the Habit Tracker.'''
+    print ("\n")
     print ("INSIGHTS")
     print ("1. View current streak")
     print ("2. View highest streaks")
@@ -176,13 +180,28 @@ def insights():
         try:
             insights_choice = int (input ("Enter your insights choice: "))
             if insights_choice == 1:
+                print ("\n")
+                print ("CURRENT STREAKS")
                 hb.print_current_streaks()
+                print ("      Going back to menu...")
+                time.sleep(2)
+                menu()
                 break
             if insights_choice == 2:
-                view_highest_streaks()
+                print ("\n")
+                print ("HIGHEST STREAKS")
+                hb.print_highest_streaks()
+                print ("     Going back to menu...")
+                time.sleep(2)
+                menu()
                 break
             if insights_choice == 3:
-                view_average_streaks()
+                print ("\n")
+                print ("AVERAGE STREAKS")
+                hb.print_average_streaks()
+                print ("     Going back to menu...")
+                time.sleep(2)
+                menu()
                 break
             if insights_choice == 9:
                 menu()
@@ -194,28 +213,224 @@ def insights():
 # 2. View Schedule
 def view_schedule():
     ''' Function to display the schedule of the Habit Tracker.'''
-    print ("SCHEDULE")
-    ################
+    print ("\n SCHEDULE")
+    hb.print_weekly_habits()
+    hb.print_daily_habits()
+    print (" Going back to menu...")
+    time.sleep(2)
+    menu()
 
-
+# 3. View Description
 def description():
     ''' Function to display the description of the Habit Tracker.'''
+    print ("\n")
     print ("DESCRIPTION")
-    ######### hier noch so db.get_habit_description() oder so einfügen
+    hb.print_habit_description()
+    print (" Going back to menu...")
+    time.sleep(2)
+    menu()
 
+# 4. Delete Habit
 def delete_habit ():
-    print ("Which habit do you want to delete?")
-    ########### hier fehlt auch nochs 
+    hb.load_all_habits()
+    print (" \n Which habit do you want to delete?")
+    hb.print_all_habit_names()
+    number_of_habits = db.get_number_of_rows()
+    #input handling of delete habit
+    while True:
+        try:
+            delete_choice = int (input ("Enter the number of the habit you want to delete: "))
+            if number_of_habits < delete_choice < 9:
+                print ("You have only got " + str(number_of_habits) + " habits. Try again")
+                continue
+            if delete_choice == 1:
+                print ("You have selected " + hb.habit1.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit1.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 2:
+                print ("You have selected " + hb.habit2.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit2.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 3:
+                print ("You have selected " + hb.habit3.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit3.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 4:
+                print ("You have selected " + hb.habit4.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit4.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 5:
+                print ("You have selected " + hb.habit5.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit5.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 6:
+                print ("You have selected " + hb.habit6.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit6.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 7:
+                print ("You have selected " + hb.habit7.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit7.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 8:
+                print ("You have selected " + hb.habit8.habit_name + ". \n Please note: All history of this habit will be deleted too.")
+                confirmation = hb.confirm_deleted_habit_selection()
+                if confirmation == True:
+                    db.remove_deleted_habit(hb.habit8.habit_name)
+                    print ("Habit deleted.")
+                    time.sleep(2)
+                    menu()
+                    break
+                elif confirmation == False:
+                    print ("Habit not deleted. Going back...")
+                    time.sleep(2)
+                    delete_habit()
+                    break
+            if delete_choice == 9:
+                menu()
+                break
 
+
+
+
+                       
+        except ValueError:
+            print ("Please enter a number (not a name)")
+            continue
+
+# 5. Add Habit
 def add_habit():
     ''' Function to add a habit to the Habit Tracker.'''
+    print ("\n")
     print ("ADD HABIT")
-    ##########Hier fehlt noch viel 
+    habit_name = input("What's the name of the habit you want to create?")
+    habit_description = input("Please add a description to your habit.")
+    print ("Would you like to track this habit daily or weekly?")
+    while True:
+        periodcitiy = input("Enter 'daily' or 'weekly': ").strip().lower()
+        if periodcitiy == "daily":
+            while True:
+                try:
+                    frequency = int(input("How often do you want to do this habit per day?").strip())
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+            periodcitiy = "day"
+            break 
+        elif periodcitiy == "weekly":
+            while True:
+                try:
+                    frequency = int(input("How often do you want to do this habit per week?").strip())
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+            periodcitiy = "week"
+            break
+        else:
+            print("Invalid input. Please enter 'daily' or 'weekly'.")
+    
+    print ("When would you like your habit to start?")
+    while True:
+        start_date_choice =  input ("Press 1 for Today or Press 2 for a specific date.")
+        if start_date_choice == "1":
+            last_timestamp = hb.today
+            print ("Habit starts today.")
+            break
+        elif start_date_choice == "2":
+            while True:
+                last_timestamp = input ("On which day you want the habit to start. PLease enter in the format 'DD.MM.YYYY': ")
+                last_timestamp = hb.dt.datetime.strptime(last_timestamp, "%d.%m.%Y").date()
+                if last_timestamp < hb.today:
+                    print ("Invalid input. Please enter a date in the future.")
+                    continue
+                print ("Habit starts on " + last_timestamp.strftime("%d.%m.%Y"))
+                break
+            break
+        else:
+            print ("Invalid input. Please try again.")
+            continue
+    print ("Habit added.")
+    db.insert_created_habit(habit_name, habit_description, periodcitiy, frequency, last_timestamp)
+    time.sleep(2)
+    menu()
+
+
+
 
 
 ######################
 ############ Test Area 
 ######################
 
+print ("\n")
 welcome_greeting()
 start_page()

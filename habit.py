@@ -36,14 +36,11 @@ class Habit:
                 self.last_timestamp = today
                 self.current_frequency = 0
                 self.current_streak += 1 
-                print ("First case: Habit is done how its supposed to be done")
             elif self.last_timestamp < today and self.current_frequency < self.frequency:                      #this is the case when the habit has not been done often enough within the day
                 self.break_habit()
-                print ("Second case: Habit has not been done often enough within the day")
             elif self.last_timestamp < yesterday and self.current_frequency == self.frequency:                       #this is the case when the habit has been completly done within the day but the program was not started on the next day. 
                 self.current_streak += 1                                                                             #In order to count the current streaks correctly, we still need to add 1 to current streak before it is broken
-                self.break_habit()
-                print ("Third case: Habit has been completly done within the day but the program was not started on the next day") 
+                self.break_habit() 
             else:
                 pass    
         elif self.periodicity == "week":
@@ -77,11 +74,12 @@ class Habit:
     def break_habit(self):
         ''' Method to break the habit. 
         Current_Frequency, Current_Streak are reset to zero and last_timestamp is set to today.'''
+        db.insert_habit_history(self.habit_name, self.current_streak, self.last_timestamp)
         self.current_frequency = 0
         self.current_streak = 0
         self.last_timestamp = today
         print (self.habit_name + " streak has been broken.")
-        #hier noch Methode hinzufügen, dass Daten auch in die habit_history Tabelle geschrieben werden
+
 
 def load_all_habits():
     max_rows = db.get_number_of_rows()
@@ -156,27 +154,59 @@ def print_current_streaks ():
     for habit in current_streaks:
         print(f"{habit[0]}: Current Streak: {habit[1]}")
 
+def print_highest_streaks():
+    highest_streaks = db.get_highest_streaks()
+    highest_streaks = sorted(highest_streaks, key=lambda x: x[1], reverse=True)   #sorts the lsit from highest to lowest 
+    for streak in highest_streaks:
+        print (streak[0] + " " + str(streak[1]))
+
+def print_average_streaks():    
+    average_streaks = db.get_average_streaks()
+    average_streaks = sorted(average_streaks, key=lambda x: x[1])   #sorts the list from lowest to highest
+    print (average_streaks)
+    for streak in average_streaks:
+        print (streak[0] + " " + str(streak[1]))
+    
+
+def print_weekly_habits ():
+    weekly_habits = db.get_weekkly_habits()
+    print ("Weekly Habits:")
+    for habit in weekly_habits:
+        print(habit[0] + " " + str(habit[1]) + " times a week")
+
+def print_daily_habits ():
+    daily_habits = db.get_daily_habits()
+    print ("Daily Habits:")
+    for habit in daily_habits:
+        print (habit[0] + " " + str(habit[1]) + " times a day")
+
+def print_habit_description ():
+    habit_description = db.get_habit_description()
+    for habit in habit_description:
+        print (habit[0] + ": " + habit[1])
+
+def print_all_habit_names ():                                 #used in delete Habit function
+    habit_names = db.get_all_habit_names()
+    for i, name in enumerate(habit_names):
+        print (f"{i+1}. {name[0]}")
+
+def confirm_deleted_habit_selection():
+    print ("Do you really want to delete this habit?")
+    print ("Press 1 to confirm")
+    print ("Press 2 to cancel")
+    confirmation = input("Enter your choice: ")
+    while confirmation not in ["1", "2"]:
+        print ("Please enter a valid choice")
+        confirmation = input("Enter your choice: ")
+        
+    if confirmation == "1":
+        return True
+    elif confirmation == "2":
+        return False
+        
+
+
 
 #########################
 ###### Test Area ########
 #########################
-
-
-
-# def __init__(self, habit_name, habit_specification, periodicity, current_frequency, frequency, last_timestamp, current_streak):
-
-'''Testhabit = Habit("Testhabit", "Test", "week", 3, 3, "2024-04-14", 0)
-
-
-print (Testhabit.current_frequency)
-print (Testhabit.frequency)
-print (Testhabit.current_streak)
-print (Testhabit.last_timestamp)
-print ("-----------------") 
-Habit.control_time_habit(Testhabit)
-print ("-----------------") 
-print (Testhabit.current_frequency)
-print (Testhabit.frequency)
-print (Testhabit.current_streak)
-print (Testhabit.last_timestamp)
-'''
