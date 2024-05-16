@@ -7,17 +7,13 @@ from database import database_controller
 db = database_controller ()
 import time
 
-#loading all habits from the database into the habit objects
 
-def welcome_greeting ():
-    print ("Hi! Welcome to the Habit Tracker")
-    print (" Got any tasks done?")
+################# 
 
 def start_page():
     ''' Function to display the start page of the Habit Tracker.'''
     # Loading all required objects
     hb.load_all_habits()
-    ## hier noch hb.control_time() einfügen sobald die Methode fertig ist
     # getting number of habits in order to avoid an error message
     number_of_habits = db.get_number_of_rows()
     row = 0 
@@ -59,6 +55,8 @@ def start_page():
         print ("Maximum number of habits reached.")
         break
     print ("\n")
+    print ("Press the number of the habit you want to check off.")
+    print ("Press 'reload' to reload the page")
     print ("Press 0 for menu")
     print ("Press 9 to exit")
 
@@ -66,9 +64,15 @@ def start_page():
     while True:
         try:
             choice = input("Enter your choice: ")
+            if choice == "reload":
+                start_page()
+                break
             choice = int(choice) 
             if   number_of_habits < choice < 9:
                 print ("You have only got " + str(number_of_habits) + " habits. Try again")
+                continue
+            elif choice > 9:
+                print ("Invalid number. Please try again.")
                 continue
             if choice == 1:
                 print ("You have selected " + hb.habit1.habit_name)
@@ -112,7 +116,8 @@ def start_page():
                 continue
             if choice == 9:
                 print ("Goodbye!")
-                break
+                print ("Exiting program...")
+                exit()
             if choice == 0:
                 menu()
                 break
@@ -174,7 +179,9 @@ def insights():
     print ("1. View current streak")
     print ("2. View highest streaks")
     print ("3. View average streaks")
-    print ("9. Go back to menu")
+    print ("\n")
+    print ("Please note: a streak is defined as the successful completion of one habit for a given period (e.g. day or week).")
+    print ("Press 9 to go back to menu")
     # Input Handling of the insights
     while True:
         try:
@@ -183,25 +190,27 @@ def insights():
                 print ("\n")
                 print ("CURRENT STREAKS")
                 hb.print_current_streaks()
-                print ("      Going back to menu...")
+                print ("\n")
+                print ("Please note: Streaks for habits completed today or this week will be updated the following day or week.")
+                print ("      Going back to insights...")
                 time.sleep(2)
-                menu()
+                insights()
                 break
             if insights_choice == 2:
                 print ("\n")
                 print ("HIGHEST STREAKS")
                 hb.print_highest_streaks()
-                print ("     Going back to menu...")
+                print ("     Going back to insights...")
                 time.sleep(2)
-                menu()
+                insights()
                 break
             if insights_choice == 3:
                 print ("\n")
                 print ("AVERAGE STREAKS")
                 hb.print_average_streaks()
-                print ("     Going back to menu...")
+                print ("     Going back to insights...")
                 time.sleep(2)
-                menu()
+                insights()
                 break
             if insights_choice == 9:
                 menu()
@@ -215,6 +224,7 @@ def view_schedule():
     ''' Function to display the schedule of the Habit Tracker.'''
     print ("\n SCHEDULE")
     hb.print_weekly_habits()
+    print ("\n")
     hb.print_daily_habits()
     print (" Going back to menu...")
     time.sleep(2)
@@ -235,11 +245,13 @@ def delete_habit ():
     hb.load_all_habits()
     print (" \n Which habit do you want to delete?")
     hb.print_all_habit_names()
+    print (" \n Press shown key to delete habit") 
+    print ("Press 9 to go back to menu")
     number_of_habits = db.get_number_of_rows()
     #input handling of delete habit
     while True:
         try:
-            delete_choice = int (input ("Enter the number of the habit you want to delete: "))
+            delete_choice = int (input ("Enter: "))
             if number_of_habits < delete_choice < 9:
                 print ("You have only got " + str(number_of_habits) + " habits. Try again")
                 continue
@@ -370,17 +382,33 @@ def delete_habit ():
 # 5. Add Habit
 def add_habit():
     ''' Function to add a habit to the Habit Tracker.'''
+    # get all existing habit_names so that the user can't add a habit with the same name and number of habits
+    habit_names = [name[0] for name in db.get_all_habit_names()]
+    number_of_habits = db.get_number_of_rows()
     print ("\n")
     print ("ADD HABIT")
-    habit_name = input("What's the name of the habit you want to create?")
-    habit_description = input("Please add a description to your habit.")
+    print ("You can alwyas go back by typing 'cancel'. PLease note that the habit will not be saved then.") 
+    
+    if number_of_habits == 8:
+        print ("Maximum number of habits reached. Please delete a habit first.")
+        print ("Going back to menu...")
+        time.sleep(2)
+        menu()
+    
+    while True:
+        habit_name = control_input_for_cancel("What's the name of the habit you want to create?")
+        if habit_name in habit_names:
+            print ("Habit name already exists. Please choose another name.")
+            continue 
+        break 
+    habit_description = control_input_for_cancel("Please add a description to your habit.")
     print ("Would you like to track this habit daily or weekly?")
     while True:
-        periodcitiy = input("Enter 'daily' or 'weekly': ").strip().lower()
+        periodcitiy = control_input_for_cancel("Enter 'daily' or 'weekly': ").strip().lower()
         if periodcitiy == "daily":
             while True:
                 try:
-                    frequency = int(input("How often do you want to do this habit per day?").strip())
+                    frequency = int(control_input_for_cancel("How often do you want to do this habit per day?").strip())
                     break
                 except ValueError:
                     print("Invalid input. Please enter a number.")
@@ -389,7 +417,7 @@ def add_habit():
         elif periodcitiy == "weekly":
             while True:
                 try:
-                    frequency = int(input("How often do you want to do this habit per week?").strip())
+                    frequency = int(control_input_for_cancel("How often do you want to do this habit per week?").strip())
                     break
                 except ValueError:
                     print("Invalid input. Please enter a number.")
@@ -397,17 +425,16 @@ def add_habit():
             break
         else:
             print("Invalid input. Please enter 'daily' or 'weekly'.")
-    
     print ("When would you like your habit to start?")
     while True:
-        start_date_choice =  input ("Press 1 for Today or Press 2 for a specific date.")
+        start_date_choice =  control_input_for_cancel ("Press 1 for Today or Press 2 for a specific date.")
         if start_date_choice == "1":
             last_timestamp = hb.today
             print ("Habit starts today.")
             break
         elif start_date_choice == "2":
             while True:
-                last_timestamp = input ("On which day you want the habit to start. PLease enter in the format 'DD.MM.YYYY': ")
+                last_timestamp = control_input_for_cancel ("On which day you want the habit to start? PLease enter in the format 'DD.MM.YYYY': ")
                 last_timestamp = hb.dt.datetime.strptime(last_timestamp, "%d.%m.%Y").date()
                 if last_timestamp < hb.today:
                     print ("Invalid input. Please enter a date in the future.")
@@ -418,19 +445,27 @@ def add_habit():
         else:
             print ("Invalid input. Please try again.")
             continue
-    print ("Habit added.")
     db.insert_created_habit(habit_name, habit_description, periodcitiy, frequency, last_timestamp)
+    print ("Habit added.")
+    print ("Going back to menu...")
     time.sleep(2)
     menu()
+    
+def control_input_for_cancel(prompt):
+    while True:
+        user_input = input(prompt).strip()
+        if user_input == "cancel":
+            print("Going back to menu...")
+            time.sleep(2)
+            menu()
+            return None
+        elif user_input:
+            return user_input
 
 
 
-
-
-######################
-############ Test Area 
-######################
-
+############# Beginning of program #############
 print ("\n")
-welcome_greeting()
+print ("Hi! Welcome to the Habit Tracker")
+print (" Got any tasks done?")
 start_page()

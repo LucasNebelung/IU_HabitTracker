@@ -8,7 +8,7 @@ from database import database_controller
 db = database_controller () 
 
 # defining datetime objects
-today = dt.date.today()
+today = dt.date.today()    # dt.date(2024,5,20) is a convenient way to simulate different dates and test if everything works accordingly
 yesterday = today - dt.timedelta(days=1)
 one_week_ago = today - dt.timedelta(weeks=1)
 one_day = dt.timedelta(days=1)
@@ -35,7 +35,7 @@ class Habit:
             if self.last_timestamp == yesterday and self.current_frequency == self.frequency:                  #this is the case when the habit is done how its supposed to be done
                 self.last_timestamp = today
                 self.current_frequency = 0
-                self.current_streak += 1 
+                self.current_streak += 1
             elif self.last_timestamp < today and self.current_frequency < self.frequency:                      #this is the case when the habit has not been done often enough within the day
                 self.break_habit()
             elif self.last_timestamp < yesterday and self.current_frequency == self.frequency:                       #this is the case when the habit has been completly done within the day but the program was not started on the next day. 
@@ -62,7 +62,9 @@ class Habit:
         ''' Method to check off the habit. '''
         self.last_timestamp = dt.datetime.strptime(self.last_timestamp, "%Y-%m-%d").date()
         if self.current_frequency == self.frequency:
-            print ("Unable to check off habit. You have already reached your goal for this habit")
+            print ("Unable to check off " + self.habit_name +". You have already reached your goal for this habit!")
+        elif self.last_timestamp > today: 
+            print ("Unable to check off " + self.habit_name + ". This habit starts on the " + self.last_timestamp.strftime("%d.%m.%Y") + " and can only be checked off from that day on.")
         else:
             self.current_frequency += 1
             print (self.habit_name + " has been checked off successfully.")
@@ -79,6 +81,9 @@ class Habit:
         self.current_streak = 0
         self.last_timestamp = today
         print (self.habit_name + " streak has been broken.")
+
+
+############## Functions outside of habit class ######################
 
 
 def load_all_habits():
@@ -152,18 +157,17 @@ def load_all_habits():
 def print_current_streaks (): 
     current_streaks = db.get_current_streaks()
     for habit in current_streaks:
-        print(f"{habit[0]}: Current Streak: {habit[1]}")
+        print(f"{habit[0]}  {habit[1]}")
 
 def print_highest_streaks():
     highest_streaks = db.get_highest_streaks()
-    highest_streaks = sorted(highest_streaks, key=lambda x: x[1], reverse=True)   #sorts the lsit from highest to lowest 
+    highest_streaks = sorted(highest_streaks, key=lambda x: x[1], reverse=True)   #sorts the list from highest to lowest 
     for streak in highest_streaks:
         print (streak[0] + " " + str(streak[1]))
 
 def print_average_streaks():    
     average_streaks = db.get_average_streaks()
     average_streaks = sorted(average_streaks, key=lambda x: x[1])   #sorts the list from lowest to highest
-    print (average_streaks)
     for streak in average_streaks:
         print (streak[0] + " " + str(streak[1]))
     
@@ -171,14 +175,32 @@ def print_average_streaks():
 def print_weekly_habits ():
     weekly_habits = db.get_weekkly_habits()
     print ("Weekly Habits:")
-    for habit in weekly_habits:
-        print(habit[0] + " " + str(habit[1]) + " times a week")
+    for habit in weekly_habits:                    
+        #initializing a dictionary to convert the weekday number to the weekday name
+        weekday_dict = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}    
+        #retrieving date from the database and converting it to a date object
+        retrieved_date_str = habit[2] 
+        date_obj = dt.datetime.strptime(retrieved_date_str, "%Y-%m-%d").date()
+        #converting the date to a weekday name
+        weekday_num = dt.date.weekday (date_obj)
+        weekday_name = weekday_dict[weekday_num]
+        #printing the habits in a more readable way
+        if date_obj <= today:
+            print(habit[0] + " " + str(habit[1]) + " time(s) per week starting every " + weekday_name)
+        elif date_obj > today:
+            print(habit[0] + " " + str(habit[1]) + " time(s) per week starting from the " + date_obj.strftime("%d.%m.%Y"))
 
 def print_daily_habits ():
     daily_habits = db.get_daily_habits()
     print ("Daily Habits:")
     for habit in daily_habits:
-        print (habit[0] + " " + str(habit[1]) + " times a day")
+        retrieved_date_str = habit[2]
+        date_obj = dt.datetime.strptime(retrieved_date_str, "%Y-%m-%d").date()
+        # checking whether habit is in future or already started
+        if date_obj == today:
+            print (habit[0] + " " + str(habit[1]) + " time(s) every day")
+        elif date_obj > today:
+            print (habit[0] + " " + str(habit[1]) + " time(s) per day starting from the " + date_obj.strftime("%d.%m.%Y")) 
 
 def print_habit_description ():
     habit_description = db.get_habit_description()
@@ -210,3 +232,4 @@ def confirm_deleted_habit_selection():
 #########################
 ###### Test Area ########
 #########################
+ 

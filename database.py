@@ -131,7 +131,7 @@ class database_controller:
         ''' Method to get all habits that are week.'''
         conn = sqlite3.connect('habit_tracker.db')
         c = conn.cursor()
-        c.execute('''SELECT habit_name, frequency FROM habits WHERE periodicity = "week"''')
+        c.execute('''SELECT habit_name, frequency, last_timestamp FROM habits WHERE periodicity = "week"''')
         week_habits = c.fetchall()
         conn.close()
         return week_habits
@@ -140,7 +140,7 @@ class database_controller:
         ''' Method to get all habits that are day.'''
         conn = sqlite3.connect('habit_tracker.db')
         c = conn.cursor()
-        c.execute('''SELECT habit_name, frequency FROM habits WHERE periodicity = "day"''')
+        c.execute('''SELECT habit_name, frequency, last_timestamp FROM habits WHERE periodicity = "day"''')
         day_habits = c.fetchall()
         conn.close()
         return day_habits
@@ -173,7 +173,8 @@ class database_controller:
         return habit
     
     def get_all_habit_names(self):
-        ''' Method to get all habit names.'''
+        ''' Method to get all habit names. 
+        Used in delete habit function and to check whether a habit already exists.'''
         conn = sqlite3.connect('habit_tracker.db')
         c = conn.cursor()
         c.execute('''SELECT habit_name FROM habits ORDER BY ROWID''')
