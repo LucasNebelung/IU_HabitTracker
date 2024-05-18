@@ -1,6 +1,7 @@
 ##############################
-# Backend ###################
+##### HABIT CLASS ###########
 ##############################
+
 
 # Importing modules
 import datetime as dt
@@ -14,7 +15,7 @@ one_week_ago = today - dt.timedelta(weeks=1)
 one_day = dt.timedelta(days=1)
 one_week = dt.timedelta(weeks=1) 
 
-# defining Habit class
+# defining Habit class and relevant methods
 class Habit:
     def __init__(self, habit_name, habit_specification, periodicity, current_frequency, frequency, last_timestamp, current_streak):
         self.habit_name = habit_name
@@ -29,7 +30,7 @@ class Habit:
         return f'Habit({self.habit_name}, {self.habit_specification}, {self.periodicity}, {self.current_frequency}, {self.frequency}, {self.last_timestamp}, {self.current_streak}, {self.is_in_time})'
 
     def control_time_habit(self):
-        ''' Method to control whether the habit is in time or not based on Periodicity and last_timestamp.'''
+        ''' Method to control whether the habit is in time or not based on periodicity, last_timestamp and frequency.'''
         self.last_timestamp = dt.datetime.strptime(self.last_timestamp, "%Y-%m-%d").date()
         if self.periodicity == "day":
             if self.last_timestamp == yesterday and self.current_frequency == self.frequency:                  #this is the case when the habit is done how its supposed to be done
@@ -84,10 +85,15 @@ class Habit:
 
 
 ############## Functions outside of habit class ######################
+# These functions are mainly used as part of the UI to keep the main.py file clean and readable####
 
 
 def load_all_habits():
-    max_rows = db.get_number_of_rows()
+    '''Function to load all habits from the database by 
+    1. create an instance of each row in the database
+    2. control whether the habit is in time or not (and in case it is not, break the habit)
+    3. update the habit in the database with the new values'''
+    max_rows = db.get_number_of_rows()        #this is necessary to avoid an error by making the while loop stop when there are no habits left in the database
     rows = 0
     while rows < max_rows:
         global habit1
@@ -229,7 +235,3 @@ def confirm_deleted_habit_selection():
 
 
 
-#########################
-###### Test Area ########
-#########################
- 

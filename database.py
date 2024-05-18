@@ -1,11 +1,9 @@
 #########################
-# This file contains the database_modifier class which is used to interact with the database.
+#### DATABASE MODULE ####
 #########################
 
 #importing relevant modules
 import sqlite3
-import datetime as dt
-
 
 
 class database_controller:

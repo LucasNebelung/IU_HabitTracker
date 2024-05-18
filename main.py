@@ -1,10 +1,10 @@
 ######################
-# Habit Tracker Frontend (UI)
+### USER INTERFACE ###
 #####################
 
 import habit as hb 
-from database import database_controller 
-db = database_controller ()
+from database import database_controller
+db = database_controller()
 import time
 
 
@@ -370,11 +370,7 @@ def delete_habit ():
             if delete_choice == 9:
                 menu()
                 break
-
-
-
-
-                       
+                      
         except ValueError:
             print ("Please enter a number (not a name)")
             continue
@@ -468,4 +464,5 @@ def control_input_for_cancel(prompt):
 print ("\n")
 print ("Hi! Welcome to the Habit Tracker")
 print (" Got any tasks done?")
+db.initalize_database()
 start_page()
