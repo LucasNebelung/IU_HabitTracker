@@ -11,7 +11,7 @@ import os
 
 # classes to be tested
 from habit import Habit  
-
+import database as db
 
 # defining datetime objects
 today = dt.date.today()    # dt.date(2024,5,20) is a convenient way to simulate different dates and test if everything works accordingly
@@ -32,6 +32,21 @@ class TestHabit(unittest.TestCase):
         self.habit5 = Habit ("future_habit", "Description 5", "weeek", 0, 3, future_date.strftime("%Y-%m-%d"), 4)
         self.habit6 = Habit ("already_finished_habit", "Description 6", "day", 1 , 1, today.strftime("%Y-%m-%d"), 5)
         
+    def test_database(self):
+        #Testing if the database file exists
+        self.assertTrue(os.path.exists('habit_tracker.db'), "The database file 'habit_tracker.db' does not exist.")
+        #Testing if the table habits exists
+        conn = sqlite3.connect('habit_tracker.db')
+        c = conn.cursor()
+        c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='habits' ''')
+        self.assertEqual(c.fetchone()[0], 1, "The table 'habits' does not exist.")
+        #Testing if the table habit_history exists
+        c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='habit_history' ''')
+        self.assertEqual(c.fetchone()[0], 1, "The table 'habit_history' does not exist.")
+        conn.close()
+        print ("Test database initialization passed") 
+
+
     def test_control_time_habit(self):
         #Testing Habit 1 
         self.habit1.control_time_habit()
@@ -66,8 +81,19 @@ class TestHabit(unittest.TestCase):
         self.habit2.break_habit()
         self.assertEqual(self.habit2.current_frequency, 0)
         self.assertEqual(self.habit2.last_timestamp, today)
-        self.assertEqual(self.habit2.current_streak, 0)
+        self.assertEqual(self.habit2.current_streak, 0)        
         print ("Test break_habit passed")
+
+############### Hier vielleicht noch tests für das analyse und/oder load all habits 
+
+    def tearDown(self) -> None:
+        db.remove_deleted_habit("daily_habit_in_time")
+        db.remove_deleted_habit("daily_habit_not_in_time")
+        db.remove_deleted_habit("weekly_habit_in_time")
+        db.remove_deleted_habit("weekly_habit_not_in_time")
+        db.remove_deleted_habit("future_habit")
+        db.remove_deleted_habit("already_finished_habit")
+        return super().tearDown()
     
 
 if __name__ == '__main__':

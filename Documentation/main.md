@@ -41,6 +41,7 @@ Allows users to delete a habit.
 -> Prompts the user to select a habit to delete.
 -> Confirms the deletion before proceeding.
 -> Updates the database to remove the selected habit.
+- Supporting function: confirm_deleted_habit_selection() Prompts the user to confirm the deletion of a habit. It ensures valid input before proceeding with the deletion, preventing accidental deletions.
 
 ### Add Habit
 Function: add_habit()

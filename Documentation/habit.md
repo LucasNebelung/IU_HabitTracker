@@ -64,6 +64,3 @@ These functions support the main functionalities of the Habit Tracker by interac
 
 - print_all_habit_names: Retrieves and prints the names of all habits, primarily used for selecting habits to delete.
 
-#### User Interaction
-
-- confirm_deleted_habit_selection: Prompts the user to confirm the deletion of a habit. It ensures valid input before proceeding with the deletion, preventing accidental deletions.

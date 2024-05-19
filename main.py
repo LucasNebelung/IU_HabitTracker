@@ -3,8 +3,7 @@
 #####################
 
 import habit as hb 
-from database import database_controller
-db = database_controller()
+import database as db
 import time
 
 
@@ -19,10 +18,11 @@ def start_page():
     row = 0 
     # displaying all active habits
     print ("\n")
-    while row < number_of_habits:
-        if db.get_number_of_rows == 0:
+    if number_of_habits == 0:
             print ("No habits to track. Please add a habit first.")
-            break
+    
+    while row < number_of_habits:
+       
         row += 1
         print ("1." + (hb.habit1.habit_name) + "(" +  str(hb.habit1.current_frequency) + "/" + str(hb.habit1.frequency) + ") done per " + (hb.habit1.periodicity) )
         if row == number_of_habits:
@@ -241,6 +241,7 @@ def description():
     menu()
 
 # 4. Delete Habit
+
 def delete_habit ():
     hb.load_all_habits()
     print (" \n Which habit do you want to delete?")
@@ -257,7 +258,7 @@ def delete_habit ():
                 continue
             if delete_choice == 1:
                 print ("You have selected " + hb.habit1.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit1.habit_name)
                     print ("Habit deleted.")
@@ -271,7 +272,7 @@ def delete_habit ():
                     break
             if delete_choice == 2:
                 print ("You have selected " + hb.habit2.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit2.habit_name)
                     print ("Habit deleted.")
@@ -285,7 +286,7 @@ def delete_habit ():
                     break
             if delete_choice == 3:
                 print ("You have selected " + hb.habit3.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit3.habit_name)
                     print ("Habit deleted.")
@@ -299,7 +300,7 @@ def delete_habit ():
                     break
             if delete_choice == 4:
                 print ("You have selected " + hb.habit4.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit4.habit_name)
                     print ("Habit deleted.")
@@ -313,7 +314,7 @@ def delete_habit ():
                     break
             if delete_choice == 5:
                 print ("You have selected " + hb.habit5.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit5.habit_name)
                     print ("Habit deleted.")
@@ -327,7 +328,7 @@ def delete_habit ():
                     break
             if delete_choice == 6:
                 print ("You have selected " + hb.habit6.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit6.habit_name)
                     print ("Habit deleted.")
@@ -341,7 +342,7 @@ def delete_habit ():
                     break
             if delete_choice == 7:
                 print ("You have selected " + hb.habit7.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit7.habit_name)
                     print ("Habit deleted.")
@@ -355,7 +356,7 @@ def delete_habit ():
                     break
             if delete_choice == 8:
                 print ("You have selected " + hb.habit8.habit_name + ". \n Please note: All history of this habit will be deleted too.")
-                confirmation = hb.confirm_deleted_habit_selection()
+                confirmation = confirm_deleted_habit_selection()
                 if confirmation == True:
                     db.remove_deleted_habit(hb.habit8.habit_name)
                     print ("Habit deleted.")
@@ -374,6 +375,19 @@ def delete_habit ():
         except ValueError:
             print ("Please enter a number (not a name)")
             continue
+def confirm_deleted_habit_selection():
+    print ("Do you really want to delete this habit?")
+    print ("Press 1 to confirm")
+    print ("Press 2 to cancel")
+    confirmation = input("Enter your choice: ")
+    while confirmation not in ["1", "2"]:
+        print ("Please enter a valid choice")
+        confirmation = input("Enter your choice: ")
+        
+    if confirmation == "1":
+        return True
+    elif confirmation == "2":
+        return False
 
 # 5. Add Habit
 def add_habit():
@@ -460,9 +474,11 @@ def control_input_for_cancel(prompt):
 
 
 
+
 ############# Beginning of program #############
 print ("\n")
 print ("Hi! Welcome to the Habit Tracker")
 print (" Got any tasks done?")
 db.initalize_database()
 start_page()
+

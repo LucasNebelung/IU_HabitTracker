@@ -5,8 +5,7 @@
 
 # Importing modules
 import datetime as dt
-from database import database_controller
-db = database_controller () 
+import database as db
 
 # defining datetime objects
 today = dt.date.today()    # dt.date(2024,5,20) is a convenient way to simulate different dates and test if everything works accordingly
@@ -218,19 +217,7 @@ def print_all_habit_names ():                                 #used in delete Ha
     for i, name in enumerate(habit_names):
         print (f"{i+1}. {name[0]}")
 
-def confirm_deleted_habit_selection():
-    print ("Do you really want to delete this habit?")
-    print ("Press 1 to confirm")
-    print ("Press 2 to cancel")
-    confirmation = input("Enter your choice: ")
-    while confirmation not in ["1", "2"]:
-        print ("Please enter a valid choice")
-        confirmation = input("Enter your choice: ")
-        
-    if confirmation == "1":
-        return True
-    elif confirmation == "2":
-        return False
+
         
 
 
