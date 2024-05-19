@@ -1,4 +1,4 @@
-# Main.py
+# Main.py Documentation 
 
 ## Overview
 This part of the Habit Tracker program provides the user interface and functionality for managing habits. Users can view, check off, add, and delete habits, as well as view insights and schedules related to their habits. The interface is interactive and provides various options for navigating through different features of the habit tracker.
