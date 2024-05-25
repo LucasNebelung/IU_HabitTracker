@@ -73,7 +73,7 @@ def insert_testdata():
     conn.close()
 
 
-############# METHODS TO MODIFY  ################
+############# METHODS TO MODIFY DATABASE ################
 
 def update_habit(habit_name, current_frequency, current_streak, last_timestamp):
     ''' Method to easily update the current_frequency, current_streak and last_timestamp of a habit.'''
@@ -108,90 +108,6 @@ def insert_habit_history(habit_name, streak_count, historic_timestamp):
     conn.commit()
     conn.close()
 
-
-############# METHODS TO ANALYSE  ################
-
-def get_current_streaks ():
-    ''' Method to get the current streaks of all habits.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT  habit_name, current_streak FROM habits''')
-    habits = c.fetchall()
-    conn.close()
-    return habits
-
-def get_weekkly_habits():
-    ''' Method to get all habits that are week.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT habit_name, frequency, last_timestamp FROM habits WHERE periodicity = "week"''')
-    week_habits = c.fetchall()
-    conn.close()
-    return week_habits
-
-def get_daily_habits():
-    ''' Method to get all habits that are day.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT habit_name, frequency, last_timestamp FROM habits WHERE periodicity = "day"''')
-    day_habits = c.fetchall()
-    conn.close()
-    return day_habits
-
-def get_habit_description(): 
-    ''' Method to get the description of all habits.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT habit_name, habit_specification FROM habits''')
-    habits = c.fetchall()
-    conn.close()
-    return habits
-
-def get_number_of_rows():
-    ''' Method to get the number of rows in the habits table.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT * FROM habits''')
-    rows = c.fetchall()
-    conn.close()
-    return len(rows)
-
-def get_habit_by_row (row):
-    ''' Method to get a habit by the row number.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT * FROM habits''')
-    habit = c.fetchall()[row]
-    conn.close()
-    return habit
-
-def get_all_habit_names():
-    ''' Method to get all habit names. 
-    Used in delete habit function and to check whether a habit already exists.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT habit_name FROM habits ORDER BY ROWID''')
-    habits = c.fetchall()
-    conn.close()
-    return habits
-
-def get_highest_streaks():
-    ''' Method to get the highest streak of all habits.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT habit_name, MAX(streak_count) FROM habit_history GROUP BY habit_name''')
-    highest_streaks = c.fetchall()
-    conn.close()
-    return highest_streaks
-
-def get_average_streaks():
-    ''' Method to get the average streak of all habits.'''
-    conn = sqlite3.connect('habit_tracker.db')
-    c = conn.cursor()
-    c.execute('''SELECT habit_name, ROUND(AVG(streak_count), 1) FROM habit_history GROUP BY habit_name''')
-    average_streaks = c.fetchall()
-    conn.close()
-    return average_streaks
 
 
 

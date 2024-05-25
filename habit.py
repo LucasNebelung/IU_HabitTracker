@@ -6,6 +6,7 @@
 # Importing modules
 import datetime as dt
 import database as db
+import analytics as a
 
 # defining datetime objects
 today = dt.date.today()    # dt.date(2024,5,20) is a convenient way to simulate different dates and test if everything works accordingly
@@ -83,20 +84,19 @@ class Habit:
         print (self.habit_name + " streak has been broken.")
 
 
-############## Functions outside of habit class ######################
-# These functions are mainly used as part of the UI to keep the main.py file clean and readable####
+############## Supporting functions ####################
 
 
 def load_all_habits():
     '''Function to load all habits from the database by 
-    1. create an instance of each row in the database
+    1. creating an instance of each row i.e. habit from the database
     2. control whether the habit is in time or not (and in case it is not, break the habit)
     3. update the habit in the database with the new values'''
-    max_rows = db.get_number_of_rows()        #this is necessary to avoid an error by making the while loop stop when there are no habits left in the database
+    max_rows = a.get_number_of_rows()        #this is necessary to avoid an error by making the while loop stop when there are no habits left in the database
     rows = 0
     while rows < max_rows:
         global habit1
-        habit1 = Habit (db.get_habit_by_row (0)[0], db.get_habit_by_row (0)[1], db.get_habit_by_row (0)[2], db.get_habit_by_row (0)[3], db.get_habit_by_row (0)[4], db.get_habit_by_row (0)[5], db.get_habit_by_row (0)[6])
+        habit1 = Habit (a.get_habit_by_row (0)[0], a.get_habit_by_row (0)[1], a.get_habit_by_row (0)[2], a.get_habit_by_row (0)[3], a.get_habit_by_row (0)[4], a.get_habit_by_row (0)[5], a.get_habit_by_row (0)[6])
         habit1.control_time_habit()
         db.update_habit(habit1.habit_name, habit1.current_frequency, habit1.current_streak, habit1.last_timestamp)
         rows += 1
@@ -104,7 +104,7 @@ def load_all_habits():
             return habit1
         
         global habit2
-        habit2 = Habit (db.get_habit_by_row(1)[0], db.get_habit_by_row(1)[1], db.get_habit_by_row(1)[2], db.get_habit_by_row(1)[3], db.get_habit_by_row(1)[4], db.get_habit_by_row(1)[5], db.get_habit_by_row(1)[6])
+        habit2 = Habit (a.get_habit_by_row(1)[0], a.get_habit_by_row(1)[1], a.get_habit_by_row(1)[2], a.get_habit_by_row(1)[3], a.get_habit_by_row(1)[4], a.get_habit_by_row(1)[5], a.get_habit_by_row(1)[6])
         habit2.control_time_habit()
         db.update_habit(habit2.habit_name, habit2.current_frequency, habit2.current_streak, habit2.last_timestamp)
         rows += 1
@@ -112,7 +112,7 @@ def load_all_habits():
             return habit1, habit2
         
         global habit3
-        habit3 = Habit (db.get_habit_by_row(2)[0], db.get_habit_by_row(2)[1], db.get_habit_by_row(2)[2], db.get_habit_by_row(2)[3], db.get_habit_by_row(2)[4], db.get_habit_by_row(2)[5], db.get_habit_by_row(2)[6])
+        habit3 = Habit (a.get_habit_by_row(2)[0], a.get_habit_by_row(2)[1], a.get_habit_by_row(2)[2], a.get_habit_by_row(2)[3], a.get_habit_by_row(2)[4], a.get_habit_by_row(2)[5], a.get_habit_by_row(2)[6])
         habit3.control_time_habit()
         db.update_habit(habit3.habit_name, habit3.current_frequency, habit3.current_streak, habit3.last_timestamp)
         rows += 1
@@ -120,7 +120,7 @@ def load_all_habits():
             return habit1, habit2, habit3
         
         global habit4
-        habit4 = Habit (db.get_habit_by_row(3)[0], db.get_habit_by_row(3)[1], db.get_habit_by_row(3)[2], db.get_habit_by_row(3)[3], db.get_habit_by_row(3)[4], db.get_habit_by_row(3)[5], db.get_habit_by_row(3)[6])
+        habit4 = Habit (a.get_habit_by_row(3)[0], a.get_habit_by_row(3)[1], a.get_habit_by_row(3)[2], a.get_habit_by_row(3)[3], a.get_habit_by_row(3)[4], a.get_habit_by_row(3)[5], a.get_habit_by_row(3)[6])
         habit4.control_time_habit()
         db.update_habit(habit4.habit_name, habit4.current_frequency, habit4.current_streak, habit4.last_timestamp)
         rows += 1
@@ -128,7 +128,7 @@ def load_all_habits():
             return habit1, habit2, habit3, habit4
         
         global habit5
-        habit5 = Habit (db.get_habit_by_row(4)[0], db.get_habit_by_row(4)[1], db.get_habit_by_row(4)[2], db.get_habit_by_row(4)[3], db.get_habit_by_row(4)[4], db.get_habit_by_row(4)[5], db.get_habit_by_row(4)[6])
+        habit5 = Habit (a.get_habit_by_row(4)[0], a.get_habit_by_row(4)[1], a.get_habit_by_row(4)[2], a.get_habit_by_row(4)[3], a.get_habit_by_row(4)[4], a.get_habit_by_row(4)[5], a.get_habit_by_row(4)[6])
         habit5.control_time_habit()
         db.update_habit(habit5.habit_name, habit5.current_frequency, habit5.current_streak, habit5.last_timestamp)
         rows += 1
@@ -136,7 +136,7 @@ def load_all_habits():
             return habit1, habit2, habit3, habit4, habit5
         
         global habit6
-        habit6 = Habit (db.get_habit_by_row(5)[0], db.get_habit_by_row(5)[1], db.get_habit_by_row(5)[2], db.get_habit_by_row(5)[3], db.get_habit_by_row(5)[4], db.get_habit_by_row(5)[5], db.get_habit_by_row(5)[6])
+        habit6 = Habit (a.get_habit_by_row(5)[0], a.get_habit_by_row(5)[1], a.get_habit_by_row(5)[2], a.get_habit_by_row(5)[3], a.get_habit_by_row(5)[4], a.get_habit_by_row(5)[5], a.get_habit_by_row(5)[6])
         habit6.control_time_habit()
         db.update_habit(habit6.habit_name, habit6.current_frequency, habit6.current_streak, habit6.last_timestamp)
         rows += 1
@@ -144,7 +144,7 @@ def load_all_habits():
             return habit1, habit2, habit3, habit4, habit5, habit6
         
         global habit7
-        habit7 = Habit (db.get_habit_by_row(6)[0], db.get_habit_by_row(6)[1], db.get_habit_by_row(6)[2], db.get_habit_by_row(6)[3], db.get_habit_by_row(6)[4], db.get_habit_by_row(6)[5], db.get_habit_by_row(6)[6])
+        habit7 = Habit (a.get_habit_by_row(6)[0], a.get_habit_by_row(6)[1], a.get_habit_by_row(6)[2], a.get_habit_by_row(6)[3], a.get_habit_by_row(6)[4], a.get_habit_by_row(6)[5], a.get_habit_by_row(6)[6])
         habit7.control_time_habit()
         db.update_habit(habit7.habit_name, habit7.current_frequency, habit7.current_streak, habit7.last_timestamp)
         rows += 1
@@ -152,73 +152,12 @@ def load_all_habits():
             return habit1, habit2, habit3, habit4, habit5, habit6, habit7
         
         global habit8
-        habit8 = Habit (db.get_habit_by_row(7)[0], db.get_habit_by_row(7)[1], db.get_habit_by_row(7)[2], db.get_habit_by_row(7)[3], db.get_habit_by_row(7)[4], db.get_habit_by_row(7)[5], db.get_habit_by_row(7)[6])
+        habit8 = Habit (a.get_habit_by_row(7)[0], a.get_habit_by_row(7)[1], a.get_habit_by_row(7)[2], a.get_habit_by_row(7)[3], a.get_habit_by_row(7)[4], a.get_habit_by_row(7)[5], a.get_habit_by_row(7)[6])
         habit8.control_time_habit()
         db.update_habit(habit8.habit_name, habit8.current_frequency, habit8.current_streak, habit8.last_timestamp)
         rows += 1
         if rows == max_rows: 
             return habit1, habit2, habit3, habit4, habit5, habit6, habit7, habit8
-
-def print_current_streaks (): 
-    current_streaks = db.get_current_streaks()
-    for habit in current_streaks:
-        print(f"{habit[0]}  {habit[1]}")
-
-def print_highest_streaks():
-    highest_streaks = db.get_highest_streaks()
-    highest_streaks = sorted(highest_streaks, key=lambda x: x[1], reverse=True)   #sorts the list from highest to lowest 
-    for streak in highest_streaks:
-        print (streak[0] + " " + str(streak[1]))
-
-def print_average_streaks():    
-    average_streaks = db.get_average_streaks()
-    average_streaks = sorted(average_streaks, key=lambda x: x[1])   #sorts the list from lowest to highest
-    for streak in average_streaks:
-        print (streak[0] + " " + str(streak[1]))
-    
-
-def print_weekly_habits ():
-    weekly_habits = db.get_weekkly_habits()
-    print ("Weekly Habits:")
-    for habit in weekly_habits:                    
-        #initializing a dictionary to convert the weekday number to the weekday name
-        weekday_dict = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}    
-        #retrieving date from the database and converting it to a date object
-        retrieved_date_str = habit[2] 
-        date_obj = dt.datetime.strptime(retrieved_date_str, "%Y-%m-%d").date()
-        #converting the date to a weekday name
-        weekday_num = dt.date.weekday (date_obj)
-        weekday_name = weekday_dict[weekday_num]
-        #printing the habits in a more readable way
-        if date_obj <= today:
-            print(habit[0] + " " + str(habit[1]) + " time(s) per week starting every " + weekday_name)
-        elif date_obj > today:
-            print(habit[0] + " " + str(habit[1]) + " time(s) per week starting from the " + date_obj.strftime("%d.%m.%Y"))
-
-def print_daily_habits ():
-    daily_habits = db.get_daily_habits()
-    print ("Daily Habits:")
-    for habit in daily_habits:
-        retrieved_date_str = habit[2]
-        date_obj = dt.datetime.strptime(retrieved_date_str, "%Y-%m-%d").date()
-        # checking whether habit is in future or already started
-        if date_obj == today:
-            print (habit[0] + " " + str(habit[1]) + " time(s) every day")
-        elif date_obj > today:
-            print (habit[0] + " " + str(habit[1]) + " time(s) per day starting from the " + date_obj.strftime("%d.%m.%Y")) 
-
-def print_habit_description ():
-    habit_description = db.get_habit_description()
-    for habit in habit_description:
-        print (habit[0] + ": " + habit[1])
-
-def print_all_habit_names ():                                 #used in delete Habit function
-    habit_names = db.get_all_habit_names()
-    for i, name in enumerate(habit_names):
-        print (f"{i+1}. {name[0]}")
-
-
-        
 
 
 

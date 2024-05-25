@@ -4,56 +4,30 @@
 
 import habit as hb 
 import database as db
+import analytics as a
 import time
-
+import datetime as dt
+from habit import today
 
 ################# 
 
-def start_page():
+def start_page ():
     ''' Function to display the start page of the Habit Tracker.'''
     # Loading all required objects
     hb.load_all_habits()
     # getting number of habits in order to avoid an error message
-    number_of_habits = db.get_number_of_rows()
+    number_of_habits = a.get_number_of_rows()
     row = 0 
     # displaying all active habits
     print ("\n")
     if number_of_habits == 0:
             print ("No habits to track. Please add a habit first.")
-    
-    while row < number_of_habits:
-       
-        row += 1
-        print ("1." + (hb.habit1.habit_name) + "(" +  str(hb.habit1.current_frequency) + "/" + str(hb.habit1.frequency) + ") done per " + (hb.habit1.periodicity) )
-        if row == number_of_habits:
-            break
-        print ("2." + (hb.habit2.habit_name) + "(" +  str(hb.habit2.current_frequency) + "/" + str(hb.habit2.frequency) + ") done per " + (hb.habit2.periodicity) )
-        row += 1
-        if row == number_of_habits:
-            break
-        print ("3." + (hb.habit3.habit_name) + "(" +  str(hb.habit3.current_frequency) + "/" + str(hb.habit3.frequency) + ") done per " + (hb.habit3.periodicity) )
-        row += 1
-        if row == number_of_habits:
-            break
-        print ("4." + (hb.habit4.habit_name) + "(" +  str(hb.habit4.current_frequency) + "/" + str(hb.habit4.frequency) + ") done per " + (hb.habit4.periodicity) )
-        row += 1
-        if row == number_of_habits:
-            break
-        print ("5." + (hb.habit5.habit_name) + "(" +  str(hb.habit5.current_frequency) + "/" + str(hb.habit5.frequency) + ") done per " + (hb.habit5.periodicity) )
-        row += 1
-        if row == number_of_habits:
-            break
-        print ("6." + (hb.habit6.habit_name) + "(" +  str(hb.habit6.current_frequency) + "/" + str(hb.habit6.frequency) + ") done per " + (hb.habit6.periodicity) )
-        row += 1
-        if row == number_of_habits:
-            break
-        print ("7." + (hb.habit7.habit_name) + "(" +  str(hb.habit7.current_frequency) + "/" + str(hb.habit7.frequency) + ") done per " + (hb.habit7.periodicity) )
-        row += 1
-        if row == number_of_habits:
-            break
-        print ("8." + (hb.habit8.habit_name) + "(" +  str(hb.habit8.current_frequency) + "/" + str(hb.habit8.frequency) + ") done per " + (hb.habit8.periodicity) )
-        print ("Maximum number of habits reached.")
-        break
+    else:
+        habit_info = a.get_all_habit_info()
+        for i, habit in enumerate(habit_info, start=1):
+            name, current_frequency, frequency, periodicity = habit
+            print(f"{i}.{name}({current_frequency}/{frequency}) done per {periodicity}")
+
     print ("\n")
     print ("Press the number of the habit you want to check off.")
     print ("Press 'reload' to reload the page")
@@ -189,7 +163,9 @@ def insights():
             if insights_choice == 1:
                 print ("\n")
                 print ("CURRENT STREAKS")
-                hb.print_current_streaks()
+                current_streaks = a.get_current_streaks()
+                for habit in current_streaks:
+                    print(f"{habit[0]}  {habit[1]}")
                 print ("\n")
                 print ("Please note: Streaks for habits completed today or this week will be updated the following day or week.")
                 print ("      Going back to insights...")
@@ -199,7 +175,27 @@ def insights():
             if insights_choice == 2:
                 print ("\n")
                 print ("HIGHEST STREAKS")
-                hb.print_highest_streaks()
+                highest_streaks = a.get_highest_streaks()
+                #sorts the list from highest to lowest 
+                highest_streaks = sorted(highest_streaks, key=lambda x: x[1], reverse=True)   
+                for streak in highest_streaks:
+                    print (streak[0] + " " + str(streak[1]))
+                highest_overall_streak = highest_streaks[0]
+                print ("\n")
+                
+                print("Your highest overall streak is: " + str(highest_overall_streak[0]) + " with a streak of " + str(highest_overall_streak[1]))
+                highest_streak_by_periodicity = a.get_highest_streaks_by_periodicity()
+                #sorting them by periodicity
+                highest_weekly_habits = [habit for habit in highest_streak_by_periodicity if habit[1] == 'week']
+                highest_daily_habits = [habit for habit in highest_streak_by_periodicity if habit[1] == 'day']
+                #sorting them by highest streak
+                highest_weekly_habits = max(highest_weekly_habits, key=lambda habit: habit[2])
+                highest_daily_habits = max(highest_daily_habits, key=lambda habit: habit[2])
+
+                # printing the results
+                print(f"Your highest daily habit streak is: {highest_daily_habits[0]} with a streak of {highest_daily_habits[2]}")
+                print(f"Your highest weekly habit streak is: {highest_weekly_habits[0]} with a streak of {highest_weekly_habits[2]}")
+
                 print ("     Going back to insights...")
                 time.sleep(2)
                 insights()
@@ -207,7 +203,10 @@ def insights():
             if insights_choice == 3:
                 print ("\n")
                 print ("AVERAGE STREAKS")
-                hb.print_average_streaks()
+                average_streaks = a.get_average_streaks()
+                average_streaks = sorted(average_streaks, key=lambda x: x[1])   #sorts the list from lowest to highest
+                for streak in average_streaks:
+                    print (streak[0] + " " + str(streak[1]))
                 print ("     Going back to insights...")
                 time.sleep(2)
                 insights()
@@ -223,9 +222,33 @@ def insights():
 def view_schedule():
     ''' Function to display the schedule of the Habit Tracker.'''
     print ("\n SCHEDULE")
-    hb.print_weekly_habits()
+    weekly_habits = a.get_weekly_habits()
+    print ("Weekly Habits:")
+    for habit in weekly_habits:                    
+        #initializing a dictionary to convert the weekday number to the weekday name
+        weekday_dict = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}    
+        #retrieving date from the database and converting it to a date object
+        retrieved_date_str = habit[2] 
+        date_obj = dt.datetime.strptime(retrieved_date_str, "%Y-%m-%d").date()
+        #converting the date to a weekday name
+        weekday_num = dt.date.weekday (date_obj)
+        weekday_name = weekday_dict[weekday_num]
+        #printing the habits in a more readable way
+        if date_obj <= today:
+            print(habit[0] + " " + str(habit[1]) + " time(s) per week starting every " + weekday_name)
+        elif date_obj > today:
+            print(habit[0] + " " + str(habit[1]) + " time(s) per week starting from the " + date_obj.strftime("%d.%m.%Y"))
     print ("\n")
-    hb.print_daily_habits()
+    daily_habits = a.get_daily_habits()
+    print ("Daily Habits:")
+    for habit in daily_habits:
+        retrieved_date_str = habit[2]
+        date_obj = dt.datetime.strptime(retrieved_date_str, "%Y-%m-%d").date()
+        # checking whether habit is in future or already started
+        if date_obj == today:
+            print (habit[0] + " " + str(habit[1]) + " time(s) every day")
+        elif date_obj > today:
+            print (habit[0] + " " + str(habit[1]) + " time(s) per day starting from the " + date_obj.strftime("%d.%m.%Y")) 
     print (" Going back to menu...")
     time.sleep(2)
     menu()
@@ -235,7 +258,9 @@ def description():
     ''' Function to display the description of the Habit Tracker.'''
     print ("\n")
     print ("DESCRIPTION")
-    hb.print_habit_description()
+    habit_description = a.get_habit_description()
+    for habit in habit_description:
+        print (habit[0] + ": " + habit[1])
     print (" Going back to menu...")
     time.sleep(2)
     menu()
@@ -245,10 +270,12 @@ def description():
 def delete_habit ():
     hb.load_all_habits()
     print (" \n Which habit do you want to delete?")
-    hb.print_all_habit_names()
+    habit_names = a.get_all_habit_names()
+    for i, name in enumerate(habit_names):
+        print (f"{i+1}. {name[0]}")
     print (" \n Press shown key to delete habit") 
     print ("Press 9 to go back to menu")
-    number_of_habits = db.get_number_of_rows()
+    number_of_habits = a.get_number_of_rows()
     #input handling of delete habit
     while True:
         try:
@@ -393,8 +420,8 @@ def confirm_deleted_habit_selection():
 def add_habit():
     ''' Function to add a habit to the Habit Tracker.'''
     # get all existing habit_names so that the user can't add a habit with the same name and number of habits
-    habit_names = [name[0] for name in db.get_all_habit_names()]
-    number_of_habits = db.get_number_of_rows()
+    habit_names = [name[0] for name in a.get_all_habit_names()]
+    number_of_habits = a.get_number_of_rows()
     print ("\n")
     print ("ADD HABIT")
     print ("You can alwyas go back by typing 'cancel'. PLease note that the habit will not be saved then.") 
@@ -480,5 +507,8 @@ print ("\n")
 print ("Hi! Welcome to the Habit Tracker")
 print (" Got any tasks done?")
 db.initalize_database()
+#db.insert_testdata()
 start_page()
+
+
 

@@ -42,25 +42,7 @@ The `Habit` class encapsulates the attributes and behaviors associated with a ha
 
 These functions support the main functionalities of the Habit Tracker by interacting with the database and providing a user-friendly interface.
 
-#### Database Interaction
-
 - load_all_habits: Loads all habits from the database, creates instances of the Habit class of each row of the habits table  and checks their status. It:
-  - Retrieves the total number of habits from the database.
-  - Iterates through each habit, creates an instance, checks its timing, and updates its status in the database.
-
-- print_current_streaks: Retrieves and prints the current streaks of all habits from the database. It provides an overview of ongoing progress.
-
-- print_highest_streaks: Retrieves and prints the highest streaks, sorted from highest to lowest. It helps identify the most successfully maintained habits.
-
-- print_average_streaks: Retrieves and prints the average streaks, sorted from lowest to highest. It provides insights into overall habit maintenance.
-
-- print_weekly_habits: Retrieves and prints all weekly habits in a readable format. It:
-  - Converts the start dates to weekday names.
-  - Differentiates between habits that have already started and those scheduled for the future.
-
-- print_daily_habits: Retrieves and prints all daily habits, showing whether they are ongoing or scheduled to start in the future. It helps users keep track of their daily goals.
-
-- print_habit_description: Retrieves and prints the descriptions of all habits. It provides detailed information about each habit.
-
-- print_all_habit_names: Retrieves and prints the names of all habits, primarily used for selecting habits to delete.
+  1. Retrieves the total number of habits from the database.
+  2. Iterates through each habit, creates an instance, checks its timing, and updates its status in the database.
 
